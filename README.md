@@ -1,1 +1,1 @@
-# Collecter
+# Collector
