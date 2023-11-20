@@ -8,7 +8,7 @@ $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $cars_model = new CarsModel($db);
 $allCars = $cars_model->getAllCars();
 
-echo '<pre>';
+
 
 
 ?>
@@ -23,10 +23,10 @@ echo '<pre>';
     <title>Cars</title>
 </head>
 <body>
-    
+<h1 class='header'> Your Car Collection </h1>
 <?php
-    var_dump($allCars);
-    // CarsViewHelper::displayAllBooks($cars_model->getAllCars());
+   
+    echo CarsViewHelper::displayAllCars($allCars);
 ?>
 </body>
 </html>

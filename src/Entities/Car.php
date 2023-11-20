@@ -8,6 +8,7 @@ class Car
     public int $bodytype_id;
     public string $bodytype;
     public ?string $image = null;
+    public int $year;
     
     public function __construct(
         int $id, 
@@ -16,7 +17,8 @@ class Car
         string $make,
         int $bodytype_id,
         string $bodytype,
-        ?string $image
+        ?string $image,
+        int $year
     )
     {
         $this->id = $id;
@@ -26,6 +28,7 @@ class Car
         $this->bodytype_id = $bodytype_id;
         $this->bodytype = $bodytype;
         $this->image = $image;
+        $this->year = $year;
     }
 }
 ?>
