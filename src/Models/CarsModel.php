@@ -9,7 +9,7 @@ class CarsModel
         $this->db = $db;
     }
 
-    public function getAllCars()
+    public function getAllCars() : array
     {
         $query = $this->db->prepare("SELECT `cars`.`id`, `cars`.`model`, `cars`.`image`, `cars`.`make_id`, `cars`.`bodytype_id`, `cars`.`year`, `bodytype`.`name` as `bodytype`, `make`.`name` as `make` FROM `cars` 
         JOIN `bodytype` ON `cars`.`bodytype_id` = `bodytype`.`id`
@@ -26,14 +26,14 @@ class CarsModel
                 $car['make'],
                 $car['bodytype_id'],
                 $car['bodytype'],
-                $car['image'],
-                $car['year']
+                $car['year'],
+                $car['image']
             );
         }
     return $carObjs;
-    
+
     }
-    public function getCarsByMakeId(int $make_id)
+    public function getCarsByMakeId(int $make_id) : array
     {
         $query = $this->db->prepare("SELECT * FROM `cars`
         JOIN `make` ON `cars`.`make_id` = `make`.`id");
