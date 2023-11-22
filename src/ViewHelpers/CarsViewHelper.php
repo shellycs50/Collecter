@@ -21,6 +21,4 @@ class CarsViewHelper
         $output .= '</div>';
         return $output;
     }
-
-    
 }

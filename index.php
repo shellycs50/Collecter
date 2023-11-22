@@ -19,7 +19,11 @@ $all_cars = $cars_model->getAllCars();
     <title>Cars</title>
 </head>
 <body>
-<h1 class='header'> Your Car Collection </h1>
+    <nav>
+        <a href='index.php'>Home</a>
+        <a href='add.php'>Add a Car</a>
+    </nav>
+<h1 class='header'>Your Car Collection</h1>
 <?php
    
     echo CarsViewHelper::displayAllCars($all_cars);
