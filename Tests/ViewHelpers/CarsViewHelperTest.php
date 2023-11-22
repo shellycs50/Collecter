@@ -1,5 +1,4 @@
 <?php
-
 require_once 'src/ViewHelpers/CarsViewHelper.php';
 require_once 'src/Entities/Car.php';
 use PHPUnit\Framework\TestCase;
@@ -13,9 +12,14 @@ class CarsViewHelperTest extends TestCase
         $testObjs[] = $testCar;
         $result = CarsViewHelper::displayAllCars($testObjs);
         
-        $this->assertEquals("<div class='car-grid'><div class='car-wrapper'><p class='car-title'>Testmake Testcar</p><p class='car-year'>2000</p><img src='' alt='car image'/><p>Type: Testbodytype</p></div></div>", $result);
+        $this->assertEquals("<div class='car-grid'><div class='car-wrapper'><p class='car-title'>Testmake Testcar</p><p class='car-year'>2000</p><img src='' alt='car image'/><p>Type: Testbodytype</p><a href='edit.php?edit_id=1'>Edit</a><a href='index.php?delete=1'>Delete</a></div></div>", $result);
+    }
+
+    public function test_displayAllCars_failure(): void 
+    {
+        $testObjs = [];
+        $result = CarsViewHelper::displayAllCars($testObjs);
+        
+        $this->assertEquals("<div class='all-cars-error-message'><p>We couldn't find any cars! Try adding one <a href='#'>here</p></div>", $result);
     }
 }
-
-
-

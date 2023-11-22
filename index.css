@@ -23,27 +23,3 @@
 .car-title {
     font-size: 2rem;
 }
-
-h1.header {
-    text-align: center;
-    margin: 20px 0px 40px 0px;
-    margin-top: 10vh;
-    
-}
-
-nav {
-    display: flex;
-    position: fixed; 
-    width: 100%;
-    height: 7vh;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.3);
-    flex-direction: row;
-    justify-content: space-around;
-    align-items: center;
-}
-
-nav a {
-    cursor: pointer;
-    color: white;
-}

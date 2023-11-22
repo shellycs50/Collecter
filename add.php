@@ -3,6 +3,7 @@ require_once 'src/ViewHelpers/CarsViewHelper.php';
 require_once 'src/Models/CarsModel.php';
 require_once 'src/Entities/Car.php';
 require_once 'src/Models/BodytypeModel.php';
+require_once 'src/ViewHelpers/BodytypeViewHelper.php';
 $db = new PDO('mysql:host=db; dbname=Cars', 'root', 'password');
 $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $bodytype_model = new BodytypeModel($db);
@@ -15,7 +16,8 @@ $bodytypes = $bodytype_model->getAllBodytypes();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel='stylesheet' href='index.css'>
+    <link rel='stylesheet' href='add.css'>
+    <link rel='stylesheet' href='master.css'>
     <title>Add a Car</title>
 </head>
 <body>
@@ -25,7 +27,17 @@ $bodytypes = $bodytype_model->getAllBodytypes();
     </nav>
 
 <h1 class='header'>Add a Car</h1>
-   <form method="post" action='addHandling.php'>
+
+<p class='error-message'>
+    <?php
+        if (isset($_GET['error']))
+        {
+            echo 'Error: ';
+            echo $_GET['error'];
+        }
+    ?>
+</p>
+   <form method="post" action='addHandling.php' id='add-form'>
    <label for="model">Model:</label>
    <input type="text" id="model" name="model" required>
 
@@ -35,10 +47,7 @@ $bodytypes = $bodytype_model->getAllBodytypes();
    <label for="bodytype">Body Type:</label>
    <select id="bodytype" name="bodytype" required>
     <?php
-    foreach($bodytypes as $bodytype)
-    {
-        echo "<option value={$bodytype->id}>{$bodytype->name}</option>";
-    }
+        echo BodytypeViewHelper::optionList($bodytypes);
     ?>
    </select>
 

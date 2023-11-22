@@ -43,7 +43,7 @@ $image_link = $_POST['image_link'];
 
 if (strlen($model) > 100)
 {
-    header('Location: error.php?error=model name too long');
+    header('Location: add.php?error=model name too long');
     exit();
 }
 elseif (strlen($image_link) > 500)
@@ -54,6 +54,11 @@ elseif (strlen($image_link) > 500)
 elseif ($year < 1900 || $year > 2024)
 {
     header('Location: error.php?error=incorrect year');
+    exit();
+}
+elseif (strlen($make > 100))
+{
+    header('Location: add.php?error=make name too long');
     exit();
 }
 else
@@ -73,19 +78,25 @@ else
     {
         if ($make_model->addMake($make) != true)
         {
-            header('Location: error.php?error=could not add make');
+            header('Location: add.php?error=could not add make');
+            exit();
         }
     }
     
     $make_id = $make_model->getIdByName($make);
-
+    if (!$make_id)
+    {
+        header('Location: add.php?error=could not find make');
+    }
     if ($cars_model->insertCar($model, $image_link, $make_id, $bodytype, $year) == true)
     {
         header('Location: index.php');
+        exit();
     }
     else
     {
-        header('Location: error.php?error=failed to insert to database');
+        header('Location: add.php?error=failed to insert to database');
+        exit();
     }
     exit();
 }

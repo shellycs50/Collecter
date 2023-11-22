@@ -17,12 +17,16 @@ class MakeModel
         //would like to crossreference makes with a list of actual makes, or make a database of cars for the user to select from.
     }
     
-    public function getIdByName(string $make_name) : int
+    public function getIdByName(string $make_name) : ?int
     {
         $query = $this->db->prepare("SELECT `id` FROM `make` WHERE `make`.`name` = :inputmake");
         $query->bindParam(':inputmake', $make_name);
         $query->execute();
         $res = $query->fetch();
+        if (!$res)
+        {
+            return null;
+        }
         return $res['id'];
     }
 
