@@ -4,6 +4,7 @@ require_once 'src/Models/CarsModel.php';
 require_once 'src/Entities/Car.php';
 require_once 'src/Models/MakeModel.php';
 require_once 'src/ViewHelpers/MakeViewHelper.php';
+require_once 'src/ViewHelpers/MiscViewHelper.php';
 
 $db = new PDO('mysql:host=db; dbname=Cars', 'root', 'password');
 $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);

@@ -4,6 +4,7 @@ require_once 'src/Models/CarsModel.php';
 require_once 'src/Entities/Car.php';
 require_once 'src/Models/BodytypeModel.php';
 require_once 'src/ViewHelpers/BodytypeViewHelper.php';
+require_once 'src/ViewHelpers/MiscViewHelper.php';
 
 $db = new PDO('mysql:host=db; dbname=Cars', 'root', 'password');
 $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
@@ -46,10 +47,7 @@ if (!$car)
         <?php
             if (isset($_GET['error']))
             {
-                echo "<p class='error-message'>";
-                echo 'Error: ';
-                echo $_GET['error'];
-                echo "</p>";
+                echo MiscViewHelper::DisplayError($_GET['error']);
             }
         ?>
         
