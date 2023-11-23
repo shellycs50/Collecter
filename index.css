@@ -23,3 +23,25 @@
 .car-title {
     font-size: 2rem;
 }
+
+#filter-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 30vw;
+    background-color: #DCFC37;
+    text-align: center;
+    padding: 20px;
+    border-radius: 5px;
+    gap: 10px;
+}
+
+#filter-form select {
+    text-align: center;
+}
+
+#wrapper {
+    background: url('assets/images/workshop_bg.avif');
+    color: black;
+    padding: 0;
+    margin: 0;
+}

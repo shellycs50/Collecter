@@ -38,7 +38,6 @@ class CarsViewHelper
             $output .= "<p class='car-year'>{$car->year}</p>";
             $output .= "<img src='{$car->image}' alt='car image'/>";
             $output .= "<p>Type: {$car->bodytype}</p>";
-            $output .= "<a href='edit.php?edit_id={$car->id}'>Edit</a>";
             $output .= "<a href='restore.php?restore={$car->id}'>restore</a>";
             $output .= '</div>';
         }
