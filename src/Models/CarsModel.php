@@ -34,12 +34,24 @@ class CarsModel
     return $carObjs;
     }
 
-    public function getAllCarsFilter($makeid) : array
+    public function getAllCarsFilter(int $makeid, ?string $search_term = null) : array
     {
+        if ($search_term == null || $search_term == '')
+        {
+            $query = $this->db->prepare("SELECT `cars`.`id`, `cars`.`model`, `cars`.`image`, `cars`.`make_id`, `cars`.`bodytype_id`, `cars`.`year`, `bodytype`.`name` as `bodytype`, `make`.`name` as `make` FROM `cars` 
+            JOIN `bodytype` ON `cars`.`bodytype_id` = `bodytype`.`id`
+            JOIN `make` ON `cars`.`make_id` = `make`.`id` WHERE `deleted` = 0 AND `cars`.`make_id` = :inputid;");
+            $query->execute([':inputid' => $makeid]);
+        }
+        else 
+        {
+        $search_termformat = "%{$search_term}%";
         $query = $this->db->prepare("SELECT `cars`.`id`, `cars`.`model`, `cars`.`image`, `cars`.`make_id`, `cars`.`bodytype_id`, `cars`.`year`, `bodytype`.`name` as `bodytype`, `make`.`name` as `make` FROM `cars` 
         JOIN `bodytype` ON `cars`.`bodytype_id` = `bodytype`.`id`
-        JOIN `make` ON `cars`.`make_id` = `make`.`id` WHERE `deleted` = 0 AND `cars`.`make_id` = :inputid;");
-        $query->execute([':inputid' => $makeid]);
+        JOIN `make` ON `cars`.`make_id` = `make`.`id` WHERE `deleted` = 0 AND `cars`.`make_id` = :inputid AND `cars`.`model` LIKE :inputsearch_term;");
+        $query->execute([':inputid' => $makeid, ':inputsearch_term' => $search_termformat]);
+        }
+        
         $cars = $query->fetchAll();
         $carObjs = [];
         foreach ($cars as $car) 

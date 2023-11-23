@@ -31,7 +31,7 @@ $makes = $make_model->getAllMakes();
         <a href='add.php'>Add a Car</a>
         <a href='archive.php'>Your Archive</a>
     </nav>
-<h1 class='header'>Your Car Collection</h1>
+    <h1 class='header'>Your Car Collection</h1>
     <?php
                 if (isset($_GET['error']))
                 {
@@ -47,6 +47,8 @@ $makes = $make_model->getAllMakes();
                 echo MakeViewHelper::optionList($makes);
             ?>
         </select>
+        <label for='model'>Search by Model Name:</label>
+        <input type='text' id='model' name='model'>
         <input type='submit' value='Filter By Make'>
     </form>
     <?php 
@@ -63,7 +65,7 @@ $makes = $make_model->getAllMakes();
     }
     else
     {
-        $selected_cars = $cars_model->getAllCarsFilter($_GET['make']);
+        $selected_cars = $cars_model->getAllCarsFilter($_GET['make'], $_GET['model']);
         echo CarsViewHelper::displayAllCars($selected_cars);
     }
     
