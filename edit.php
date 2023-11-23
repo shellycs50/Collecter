@@ -4,6 +4,7 @@ require_once 'src/Models/CarsModel.php';
 require_once 'src/Entities/Car.php';
 require_once 'src/Models/BodytypeModel.php';
 require_once 'src/ViewHelpers/BodytypeViewHelper.php';
+require_once 'src/ViewHelpers/MiscViewHelper.php';
 
 $db = new PDO('mysql:host=db; dbname=Cars', 'root', 'password');
 $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
@@ -13,7 +14,7 @@ $bodytypes = $bodytype_model->getAllBodytypes();
 
 if (!isset($_GET['edit_id']))
 {
-    header("Location: error.php?error=No Car To Edit Selected");
+    header("Location: index.php");
     exit(); 
 }
 
@@ -38,21 +39,18 @@ if (!$car)
         <nav>
             <a href='index.php'>Home</a>
             <a href='add.php'>Add a Car</a>
+            <a href='archive.php'>Your Archive</a>
         </nav>
     
         <h1 class='header'>Edit A Car</h1>
 
-        <p class='error-message'>
-        
         <?php
             if (isset($_GET['error']))
             {
-                echo 'Error: ';
-                echo $_GET['error'];
+                echo MiscViewHelper::DisplayError($_GET['error']);
             }
         ?>
-        </p>
-
+        
     <form method="post" action='editHandling.php' id='edit-form'>
         <input type="hidden" name="edit_id" value="<?php echo $input_id; ?>">
         <label for="model">Model: <p><?php echo $car->model;?></p></label>

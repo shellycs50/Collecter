@@ -4,6 +4,7 @@ require_once 'src/Models/CarsModel.php';
 require_once 'src/Entities/Car.php';
 require_once 'src/Models/BodytypeModel.php';
 require_once 'src/ViewHelpers/BodytypeViewHelper.php';
+require_once 'src/ViewHelpers/MiscViewHelper.php';
 $db = new PDO('mysql:host=db; dbname=Cars', 'root', 'password');
 $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
 $bodytype_model = new BodytypeModel($db);
@@ -24,19 +25,19 @@ $bodytypes = $bodytype_model->getAllBodytypes();
     <nav>
         <a href='index.php'>Home</a>
         <a href='add.php'>Add a Car</a>
+        <a href='archive.php'>Your Archive</a>
     </nav>
 
 <h1 class='header'>Add a Car</h1>
 
-<p class='error-message'>
+
     <?php
         if (isset($_GET['error']))
         {
-            echo 'Error: ';
-            echo $_GET['error'];
+            echo MiscViewHelper::DisplayError($_GET['error']);
         }
     ?>
-</p>
+
    <form method="post" action='addHandling.php' id='add-form'>
    <label for="model">Model:</label>
    <input type="text" id="model" name="model" required>

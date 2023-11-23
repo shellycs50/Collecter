@@ -1,5 +1,5 @@
 <?php
-require_once 'src/Entities/Car.php';
+require_once 'src/Entities/Make.php';
 class MakeModel
 {
     public PDO $db;
@@ -40,6 +40,20 @@ class MakeModel
         return ($res['count'] === 0);
       
     }
+
+    public function getAllMakes() : array
+    {
+        $query = $this->db->prepare("SELECT * FROM `make`");
+        $query->execute();
+        $res = $query->fetchAll();
+        $makeObjs = [];
+        foreach($res as $make)
+        {
+            $makeObjs[] = new Make($make['id'], $make['name']);
+        }
+        return $makeObjs;
+    }
+
 }
 
 //make add methods return query execute. 

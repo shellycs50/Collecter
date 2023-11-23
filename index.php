@@ -2,20 +2,19 @@
 require_once 'src/ViewHelpers/CarsViewHelper.php';
 require_once 'src/Models/CarsModel.php';
 require_once 'src/Entities/Car.php';
+require_once 'src/Models/MakeModel.php';
+require_once 'src/ViewHelpers/MakeViewHelper.php';
+require_once 'src/ViewHelpers/MiscViewHelper.php';
 
 $db = new PDO('mysql:host=db; dbname=Cars', 'root', 'password');
 $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
 $cars_model = new CarsModel($db);
-
-if (isset($_GET['delete']))
-{
-    $id_to_delete = $_GET['delete'];
-    unset($_GET['delete']);
-    $cars_model->moveToJunk($id_to_delete);
-}
-// put this on a new page ^ redirect back to index or error respectively. 
-
 $all_cars = $cars_model->getAllCars();
+
+$make_model = new MakeModel($db);
+$makes = $make_model->getAllMakes();
+
 ?>
 
 <!DOCTYPE html>
@@ -31,10 +30,44 @@ $all_cars = $cars_model->getAllCars();
     <nav>
         <a href='index.php'>Home</a>
         <a href='add.php'>Add a Car</a>
+        <a href='archive.php'>Your Archive</a>
     </nav>
 <h1 class='header'>Your Car Collection</h1>
-<?php
-    echo CarsViewHelper::displayAllCars($all_cars);
+    <?php
+                if (isset($_GET['error']))
+                {
+                    echo "<p class='error-message'>";
+                    echo 'Error: ';
+                    echo $_GET['error'];
+                    echo "</p>";
+                } 
+    ?>
+    <form method='get'>
+    <select id="make" name="make">
+            <?php
+                echo MakeViewHelper::optionList($makes);
+            ?>
+        </select>
+        <input type='submit' value='Filter By Make'>
+    </form>
+    <?php 
+       if (isset($_GET['make']))
+       {
+        echo "<form method='post' action='removefilter.php'><input type='submit' value='Remove Filter'></form>";
+       }
+    ?>
+
+    <?php
+    if (!isset($_GET['make']))
+    {
+        echo CarsViewHelper::displayAllCars($all_cars);
+    }
+    else
+    {
+        $selected_cars = $cars_model->getAllCarsFilter($_GET['make']);
+        echo CarsViewHelper::displayAllCars($selected_cars);
+    }
+    
 ?>
 </body>
 </html>
