@@ -46,10 +46,6 @@ class MakeModel
         $query = $this->db->prepare("SELECT * FROM `make`");
         $query->execute();
         $res = $query->fetchAll();
-        if (!$res)
-        {
-            return [];
-        }
         $makeObjs = [];
         foreach($res as $make)
         {

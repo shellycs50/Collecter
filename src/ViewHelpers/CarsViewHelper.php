@@ -24,7 +24,7 @@ class CarsViewHelper
         return $output;
     }
 
-    public static function displayAllDeletedCars(array $carObjs)
+    public static function displayAllDeletedCars(array $carObjs) : string
     {
         if (count($carObjs) === 0)
         {

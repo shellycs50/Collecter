@@ -1,24 +1,7 @@
 <?php
 require_once 'src/ViewHelpers/CarsViewHelper.php';
 require_once 'src/Models/CarsModel.php';
-require_once 'src/Entities/Car.php';
-require_once 'src/Models/MakeModel.php';
-require_once 'src/ViewHelpers/MakeViewHelper.php';
-
-$db = new PDO('mysql:host=db; dbname=Cars', 'root', 'password');
-$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-
-$cars_model = new CarsModel($db);
-$all_cars = $cars_model->getAllCars();
-
-$make_model = new MakeModel($db);
-$makes = $make_model->getAllMakes();
-
-?>
-
-<?php
-require_once 'src/ViewHelpers/CarsViewHelper.php';
-require_once 'src/Models/CarsModel.php';
+require_once 'src/ViewHelpers/MiscViewHelper.php';
 
 $db = new PDO('mysql:host=db; dbname=Cars', 'root', 'password');
 $db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
@@ -45,10 +28,7 @@ $deleted_cars = $cars_model->getAllDeletedCars();
     <?php
                 if (isset($_GET['error']))
                 {
-                    echo "<p class='error-message'>";
-                    echo 'Error: ';
-                    echo $_GET['error'];
-                    echo "</p>";
+                    echo MiscViewHelper::DisplayError($_GET['error']);
                 } 
     
     

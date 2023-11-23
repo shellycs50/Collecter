@@ -156,11 +156,11 @@ class CarsModel
 
     public function insertCar(string $model, string $image_link, int $make_id, string $bodytype, int $year) : bool
     {
-        $query = $this->db->prepare("INSERT into `cars`(`model`, `image`, `make_id`, `bodytype_id`, `year`) VALUES (:inputmodel, :inputimage, :inputmake_id, :inputbodytype_id, :inputyear);");
+        $query = $this->db->prepare("INSERT into `cars`(`model`, `image`, `make_id`, `bodytype_id`, `year`, `deleted`) VALUES (:inputmodel, :inputimage, :inputmake_id, :inputbodytype_id, :inputyear, 0);");
         return $query->execute([":inputmodel" => $model, ":inputimage" => $image_link, ":inputmake_id" => $make_id, ":inputbodytype_id" => $bodytype, ":inputyear" => $year, ]);
     }
 
-    public function restoreCar($id)
+    public function restoreCar(int $id)
     {
         $query = $this->db->prepare("UPDATE `cars` SET `deleted` = 0 WHERE `id` = :inputid");
         return $query->execute([':inputid' => $id]);
