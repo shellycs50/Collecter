@@ -1,0 +1,18 @@
+#add-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+}
+#add-form input {
+    width: 50%
+}
+
+#add-form p {
+    display: inline;
+}
+
+h1 {
+    text-align: center;
+}
+
