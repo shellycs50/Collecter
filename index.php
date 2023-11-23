@@ -27,6 +27,7 @@ $makes = $make_model->getAllMakes();
     <title>Cars</title>
 </head>
 <body>
+    <div id='wrapper'>
     <nav>
         <a href='index.php'>Home</a>
         <a href='add.php'>Add a Car</a>
@@ -36,19 +37,18 @@ $makes = $make_model->getAllMakes();
     <?php
                 if (isset($_GET['error']))
                 {
-                    echo "<p class='error-message'>";
-                    echo 'Error: ';
-                    echo $_GET['error'];
-                    echo "</p>";
+                    echo MiscViewHelper::DisplayError($_GET['error']);
                 } 
     ?>
-    <form method='get'>
+    <form method='get' id='filter-form'>
     <select id="make" name="make">
             <?php
                 echo MakeViewHelper::optionList($makes);
             ?>
         </select>
-        <input type='submit' value='Filter By Make'>
+        <label for='model'>Search:</label>
+        <input type='text' id='model' name='model'>
+        <input type='submit' value='Find'>
     </form>
     <?php 
        if (isset($_GET['make']))
@@ -64,11 +64,12 @@ $makes = $make_model->getAllMakes();
     }
     else
     {
-        $selected_cars = $cars_model->getAllCarsFilter($_GET['make']);
+        $selected_cars = $cars_model->getAllCarsFilter($_GET['make'], $_GET['model']);
         echo CarsViewHelper::displayAllCars($selected_cars);
     }
     
 ?>
+</div>
 </body>
 </html>
 
