@@ -24,6 +24,7 @@ $bodytypes = $bodytype_model->getAllBodytypes();
     <nav>
         <a href='index.php'>Home</a>
         <a href='add.php'>Add a Car</a>
+        <a href='archive.php'>Your Archive</a>
     </nav>
 
 <h1 class='header'>Add a Car</h1>

@@ -34,6 +34,56 @@ class CarsModel
     return $carObjs;
     }
 
+    public function getAllCarsFilter($makeid) : array
+    {
+        $query = $this->db->prepare("SELECT `cars`.`id`, `cars`.`model`, `cars`.`image`, `cars`.`make_id`, `cars`.`bodytype_id`, `cars`.`year`, `bodytype`.`name` as `bodytype`, `make`.`name` as `make` FROM `cars` 
+        JOIN `bodytype` ON `cars`.`bodytype_id` = `bodytype`.`id`
+        JOIN `make` ON `cars`.`make_id` = `make`.`id` WHERE `deleted` = 0 AND `cars`.`make_id` = :inputid;");
+        $query->execute([':inputid' => $makeid]);
+        $cars = $query->fetchAll();
+        $carObjs = [];
+        foreach ($cars as $car) 
+        {
+            $carObjs[] = new Car
+            (
+                $car['id'], 
+                $car['model'], 
+                $car['make_id'],
+                $car['make'],
+                $car['bodytype_id'],
+                $car['bodytype'],
+                $car['year'],
+                $car['image']
+            );
+        }
+    return $carObjs;
+    }
+
+    public function getAllDeletedCars() : array
+    {
+        $query = $this->db->prepare("SELECT `cars`.`id`, `cars`.`model`, `cars`.`image`, `cars`.`make_id`, `cars`.`bodytype_id`, `cars`.`year`, `bodytype`.`name` as `bodytype`, `make`.`name` as `make` FROM `cars` 
+        JOIN `bodytype` ON `cars`.`bodytype_id` = `bodytype`.`id`
+        JOIN `make` ON `cars`.`make_id` = `make`.`id` WHERE `deleted` = 1;");
+        $query->execute();
+        $cars = $query->fetchAll();
+        $carObjs = [];
+        foreach ($cars as $car) 
+        {
+            $carObjs[] = new Car
+            (
+                $car['id'], 
+                $car['model'], 
+                $car['make_id'],
+                $car['make'],
+                $car['bodytype_id'],
+                $car['bodytype'],
+                $car['year'],
+                $car['image']
+            );
+        }
+    return $carObjs;
+    }
+
     public function getCarById(int $inputid) : ?Car 
     {
         $query = $this->db->prepare("SELECT `cars`.`id`, `cars`.`model`, `cars`.`image`, `cars`.`make_id`, `cars`.`bodytype_id`, `cars`.`year`, `bodytype`.`name` as `bodytype`, `make`.`name` as `make` FROM `cars` 
@@ -98,6 +148,12 @@ class CarsModel
         return $query->execute([":inputmodel" => $model, ":inputimage" => $image_link, ":inputmake_id" => $make_id, ":inputbodytype_id" => $bodytype, ":inputyear" => $year, ]);
     }
 
+    public function restoreCar($id)
+    {
+        $query = $this->db->prepare("UPDATE `cars` SET `deleted` = 0 WHERE `id` = :inputid");
+        return $query->execute([':inputid' => $id]);
+    }
+
     public function moveToJunk(int $input_id) : bool
     {
         $query = $this->db->prepare("UPDATE `cars` SET `deleted` = 1 WHERE `id` = :inputid");
@@ -113,7 +169,6 @@ class CarsModel
     {
         return new Car(1000, 'No Car Selected', 1, 'No Car Selected', 1, 'No Car Selected', 1900);
     }
-
 }
 
 

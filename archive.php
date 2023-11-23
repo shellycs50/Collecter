@@ -16,6 +16,16 @@ $makes = $make_model->getAllMakes();
 
 ?>
 
+<?php
+require_once 'src/ViewHelpers/CarsViewHelper.php';
+require_once 'src/Models/CarsModel.php';
+
+$db = new PDO('mysql:host=db; dbname=Cars', 'root', 'password');
+$db->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
+
+$cars_model = new CarsModel($db);
+$deleted_cars = $cars_model->getAllDeletedCars();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -31,7 +41,7 @@ $makes = $make_model->getAllMakes();
         <a href='add.php'>Add a Car</a>
         <a href='archive.php'>Your Archive</a>
     </nav>
-<h1 class='header'>Your Car Collection</h1>
+<h1 class='header'>Archive</h1>
     <?php
                 if (isset($_GET['error']))
                 {
@@ -40,32 +50,9 @@ $makes = $make_model->getAllMakes();
                     echo $_GET['error'];
                     echo "</p>";
                 } 
-    ?>
-    <form method='get'>
-    <select id="make" name="make">
-            <?php
-                echo MakeViewHelper::optionList($makes);
-            ?>
-        </select>
-        <input type='submit' value='Filter By Make'>
-    </form>
-    <?php 
-       if (isset($_GET['make']))
-       {
-        echo "<form method='post' action='removefilter.php'><input type='submit' value='Remove Filter'></form>";
-       }
-    ?>
-
-    <?php
-    if (!isset($_GET['make']))
-    {
-        echo CarsViewHelper::displayAllCars($all_cars);
-    }
-    else
-    {
-        $selected_cars = $cars_model->getAllCarsFilter($_GET['make']);
-        echo CarsViewHelper::displayAllCars($selected_cars);
-    }
+    
+    
+        echo CarsViewHelper::displayAllDeletedCars($deleted_cars);
     
 ?>
 </body>

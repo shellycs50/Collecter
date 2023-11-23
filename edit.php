@@ -13,7 +13,7 @@ $bodytypes = $bodytype_model->getAllBodytypes();
 
 if (!isset($_GET['edit_id']))
 {
-    header("Location: error.php?error=No Car To Edit Selected");
+    header("Location: index.php");
     exit(); 
 }
 
@@ -38,21 +38,21 @@ if (!$car)
         <nav>
             <a href='index.php'>Home</a>
             <a href='add.php'>Add a Car</a>
+            <a href='archive.php'>Your Archive</a>
         </nav>
     
         <h1 class='header'>Edit A Car</h1>
 
-        <p class='error-message'>
-        
         <?php
             if (isset($_GET['error']))
             {
+                echo "<p class='error-message'>";
                 echo 'Error: ';
                 echo $_GET['error'];
+                echo "</p>";
             }
         ?>
-        </p>
-
+        
     <form method="post" action='editHandling.php' id='edit-form'>
         <input type="hidden" name="edit_id" value="<?php echo $input_id; ?>">
         <label for="model">Model: <p><?php echo $car->model;?></p></label>
