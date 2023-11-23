@@ -1,7 +1,7 @@
 <?php
 class BodytypeViewHelper
 {
-    public static function optionList(array $bodytypes)
+    public static function optionList(array $bodytypes) : string
     {
         if (count($bodytypes) === 0)
         {

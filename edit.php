@@ -13,15 +13,18 @@ $bodytypes = $bodytype_model->getAllBodytypes();
 
 if (!isset($_GET['edit_id']))
 {
-    header("Location: error.php?error=No Car To Get Selected");
+    header("Location: error.php?error=No Car To Edit Selected");
     exit(); 
 }
+
 $input_id = $_GET['edit_id'];
 $car = $cars_model->getCarById($input_id);
-
+// if id invalid, redirect to index. 
+if (!$car)
+{
+    header("Location: index.php");
+}
 ?>
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,7 +42,19 @@ $car = $cars_model->getCarById($input_id);
     
         <h1 class='header'>Edit A Car</h1>
 
+        <p class='error-message'>
+        
+        <?php
+            if (isset($_GET['error']))
+            {
+                echo 'Error: ';
+                echo $_GET['error'];
+            }
+        ?>
+        </p>
+
     <form method="post" action='editHandling.php' id='edit-form'>
+        <input type="hidden" name="edit_id" value="<?php echo $input_id; ?>">
         <label for="model">Model: <p><?php echo $car->model;?></p></label>
         <input type="text" id="model" name="model" value='<?php echo "{$car->model}";?>'>
 
@@ -57,8 +72,10 @@ $car = $cars_model->getCarById($input_id);
         <input type="number" id="year" name="year" min="1900" max="2099" value='<?php echo "{$car->year}";?>'>
 
         <label for="image_link">Image Link:</label>
-        <input type="text" id="image_link" name="image_link" value='<?php echo "{$car->make}";?>'>
+        <input type="text" id="image_link" name="image_link" value='<?php echo "{$car->image}";?>'>
         <img class='edit-image' src='<?php echo "$car->image";?>'>
+
+
 
         <input type="submit" value="Submit">
     </form>

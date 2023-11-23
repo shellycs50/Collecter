@@ -30,18 +30,15 @@ class MakeModel
         return $res['id'];
     }
 
-    public function checkDistinct($column, $value)
+    public function checkDistinct($column, $value) : bool
     {
         $query = $this->db->prepare("SELECT COUNT(:column) as 'count' FROM `make` WHERE :column = :value;");
         $query->execute([":column" => $column, ":value" => $value]);
         
         $res = $query->fetch();
         
-        if ($res['count'] != 0)
-        {
-            return false;
-        }
-        return true;
+        return ($res['count'] === 0);
+      
     }
 }
 

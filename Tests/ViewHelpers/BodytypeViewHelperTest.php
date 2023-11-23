@@ -12,13 +12,13 @@ class BodytypeViewHelperTest extends TestCase
         $testObjs[] = $testType;
         $result = BodytypeViewHelper::optionList($testObjs);
         
-        $this->assertEquals("<option value='5'>Imagery Car Brand</option>", $result);
+        $this->assertEquals("<option value='1000'>Imaginery Car Brand</option>", $result);
     }
 
     public function test_optionList_failure(): void 
     {
         $testObjs = [];
-        $result = CarsViewHelper::optionList($testObjs);
+        $result = BodytypeViewHelper::optionList($testObjs);
         
         $this->assertEquals("", $result);
     }

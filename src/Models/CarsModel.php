@@ -13,7 +13,7 @@ class CarsModel
     {
         $query = $this->db->prepare("SELECT `cars`.`id`, `cars`.`model`, `cars`.`image`, `cars`.`make_id`, `cars`.`bodytype_id`, `cars`.`year`, `bodytype`.`name` as `bodytype`, `make`.`name` as `make` FROM `cars` 
         JOIN `bodytype` ON `cars`.`bodytype_id` = `bodytype`.`id`
-        JOIN `make` ON `cars`.`make_id` = `make`.`id`;");
+        JOIN `make` ON `cars`.`make_id` = `make`.`id` WHERE `deleted` = 0;");
         $query->execute();
         $cars = $query->fetchAll();
         $carObjs = [];
@@ -34,13 +34,18 @@ class CarsModel
     return $carObjs;
     }
 
-    public function getCarById(int $inputid) : Car 
+    public function getCarById(int $inputid) : ?Car 
     {
         $query = $this->db->prepare("SELECT `cars`.`id`, `cars`.`model`, `cars`.`image`, `cars`.`make_id`, `cars`.`bodytype_id`, `cars`.`year`, `bodytype`.`name` as `bodytype`, `make`.`name` as `make` FROM `cars` 
         JOIN `bodytype` ON `cars`.`bodytype_id` = `bodytype`.`id`
         JOIN `make` ON `cars`.`make_id` = `make`.`id` WHERE `cars`.`id` = :input_id;");
-        $query->execute([':input_id' => $inputid]);
+        $success = $query->execute([':input_id' => $inputid]);
+        
         $car = $query->fetch();
+        if (!$car)
+        {
+            return null;
+        }
         
             $output = new Car
             (
@@ -65,17 +70,26 @@ class CarsModel
         return $cars;
     }
 
+    public function getIdByModel(string $model) : ?int
+    {
+        $query = $this->db->prepare("SELECT `id` FROM `cars` WHERE `model` = :inputmodel");
+        $success = $query->execute([':inputmodel' => $model]);
+        if (!$success)
+        {
+            return null;
+        }
+        $output = $query->fetch();
+        return $output['id'];
+    }
+
     public function checkDistinct(string $column, string $value) : bool
     {
         $query = $this->db->prepare("SELECT COUNT(:column) as 'count' FROM `cars` WHERE :column = :value;");
         $query->execute([":column" => $column, ":value" => $value]);
         $res = $query->fetch();
         
-        if ($res['count'] != 0)
-        {
-            return false;
-        }
-        return true;
+        return ($res['count'] === 0);
+        
     }
 
     public function insertCar(string $model, string $image_link, int $make_id, string $bodytype, int $year) : bool
@@ -86,24 +100,20 @@ class CarsModel
 
     public function moveToJunk(int $input_id) : bool
     {
-        $query = $this->db->prepare("SELECT * FROM `cars` WHERE `id` = :inputid");
-        $success = $query->execute([":inputid" => $input_id]);
-        if (!$success)
-        {
-            return false;
-        }
-        $res = $query->fetch();
-        var_dump($res);
-        
-        $query2 = $this->db->prepare("INSERT into `junk`(`id`, `model`, `image`, `make_id`, `bodytype_id`, `year`) VALUES (:inputid, :inputmodel, :inputimage, :inputmake_id, :inputbodytype_id, :inputyear)");
-        $success2 = $query2->execute([':inputid' => $res['id'], ':inputmodel' => $res['model'], ':inputimage' => $res['image'], ':inputmake_id' => $res['make_id'], ':inputbodytype_id' => $res['bodytype_id'], ':inputyear' => $res['year']]);
-        if (!$success2)
-        {
-            return false;
-        }
-        $query3 = $this->db->prepare("DELETE FROM `cars` WHERE `id` = :inputid");
-        return $query3->execute([":inputid" => $input_id]);
+        $query = $this->db->prepare("UPDATE `cars` SET `deleted` = 1 WHERE `id` = :inputid");
+        return $success = $query->execute([':inputid' => $input_id]);
     }
+    public function editCarAll(int $id, string $model, string $image_link, int $make_id, int $bodytype_id, int $year) : bool
+    {
+        $query = $this->db->prepare("UPDATE `cars` SET `model` = :inputmodel, `image` = :inputimage, `make_id` = :inputmake_id, `bodytype_id` = :inputbodytype_id, `year` = :inputyear WHERE `id` = :inputid");
+        return $query->execute([':inputmodel' => $model, ':inputimage' => $image_link, ':inputmake_id' => $make_id, ':inputbodytype_id' => $bodytype_id, ':inputyear' => $year, ':inputid' => $id]);
+    }
+
+    public function dummyCar()
+    {
+        return new Car(1000, 'No Car Selected', 1, 'No Car Selected', 1, 'No Car Selected', 1900);
+    }
+
 }
 
 

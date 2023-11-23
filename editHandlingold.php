@@ -2,6 +2,7 @@
 require_once 'src/Models/CarsModel.php';
 require_once 'src/Models/MakeModel.php';
 $allFieldsFilled = true;
+$input_id = $_GET['edit_id'];
 if (!isset($_POST['model']) || empty($_POST['model'])) 
 {
     $allFieldsFilled = false;
@@ -29,7 +30,7 @@ if (!isset($_POST['image_link']) || empty($_POST['image_link']))
 
 if (!$allFieldsFilled) 
 {
-    header('Location: add.php?error=fields not filled');
+    header("Location: edit.php?edit_id={$input_id}?error=fields not filled");
     exit();
 }
 
@@ -41,22 +42,22 @@ $image_link = $_POST['image_link'];
 
 if (strlen($model) > 100)
 {
-    header('Location: add.php?error=model name too long');
+    header("Location: edit.php?edit_id={$input_id}?error=model name too long");
     exit();
 }
 elseif (strlen($image_link) > 500)
 {
-    header('Location: error.php?error=image link too long');
+    header("Location: edit.php?edit_id={$input_id}?error=image link too long");
     exit();
 }
-elseif ($year < 1900 || $year > date("Y") + 1)
+elseif ($year < 1900 || $year > 2024)
 {
-    header('Location: error.php?error=incorrect year');
+    header('Location: edit.php?error=incorrect year');
     exit();
 }
-elseif (strlen($make) > 100)
+elseif (strlen($make > 100))
 {
-    header('Location: add.php?error=make name too long');
+    header('Location: edit.php?error=make name too long');
     exit();
 }
 else
@@ -66,17 +67,13 @@ else
     $cars_model = new CarsModel($db);
     $make_model = new MakeModel($db);
 
-    if (!$cars_model->checkDistinct('model', $model))
-    {
-        header('Location: add.php?error=model already in collection');
-        exit();
-    }
+    $id = $cars_model->getIdByModel($model);
 
     if ($make_model->checkDistinct('name', $make))
     {
         if ($make_model->addMake($make) != true)
         {
-            header('Location: add.php?error=could not add make');
+            header('Location: edit.php?error=could not add make');
             exit();
         }
     }
@@ -84,18 +81,18 @@ else
     $make_id = $make_model->getIdByName($make);
     if (!$make_id)
     {
-        header('Location: add.php?error=could not find make');
+        header('Location: edit.php?error=could not find make');
     }
-    if ($cars_model->insertCar($model, $image_link, $make_id, $bodytype, $year) == true)
+    if ($cars_model->editCarAll($id, $model, $image_link, $make_id, $bodytype, $year) == true)
     {
         header('Location: index.php');
         exit();
     }
     else
     {
-        header('Location: add.php?error=failed to insert to database');
+        header('Location: edit.php?error=failed to insert to database');
         exit();
     }
-    exit();
+    header('Location: index.php');
 }
 ?>
